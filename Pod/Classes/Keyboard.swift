@@ -13,9 +13,9 @@ public class Keyboard: Printable, DebugPrintable
     
     private convenience init()
     {
-        self.init(finalTransitionRect: CGRectZero, transitionDuration: 0, transitionAnimationOptions: UIViewAnimationOptions.allZeros, isPresenting: false)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardDidHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardDidShowNotification, object: nil)
+        self.init(finalTransitionRect: CGRectZero, transitionDuration: 0, transitionAnimationOptions: UIViewAnimationOptions.allZeros, isPresenting: false, forRotation: false)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleRotationNotification:", name: UIApplicationWillChangeStatusBarFrameNotification, object: UIApplication.sharedApplication())
     }
     
@@ -26,30 +26,18 @@ public class Keyboard: Printable, DebugPrintable
     
     @objc func handleKeyboardNotification(notification: NSNotification)
     {
-        var visible = notification.name == UIKeyboardDidShowNotification
         var wereRotating = areWeRotating
         
-        //Workaround to deal with the nasty iOS 8's behaviour of sending 4 keyboard notifications when rotating
-        if areWeRotating {
-            if !visible {
-                return
-            } else {
-                rotationCount--
-            }
-        }
-        if areWeRotating {
-            return
+        if wereRotating {
+            rotationCount--
         }
         
         let userInfo = notification.userInfo!
         var duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber
-        if wereRotating && duration.integerValue == 0 {
-            duration = NSNumber(double: 0.25)
-        }
         let animationOptions = UIViewAnimationOptions(rawValue: (userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedLongValue) | .BeginFromCurrentState
-        self.isKeyboardVisible = visible
+        self.isKeyboardVisible = notification.name == UIKeyboardWillShowNotification
         self.currentKeyboardFrame = self.isKeyboardVisible ? UIApplication.sharedApplication().keyWindow!.convertRect((userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue(), fromWindow: nil) : CGRectZero
-        let keyboardInfo = Keyboard(finalTransitionRect: self.currentKeyboardFrame, transitionDuration: duration, transitionAnimationOptions: animationOptions, isPresenting: self.isKeyboardVisible)
+        let keyboardInfo = Keyboard(finalTransitionRect: self.currentKeyboardFrame, transitionDuration: duration, transitionAnimationOptions: animationOptions, isPresenting: self.isKeyboardVisible, forRotation: wereRotating)
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             NSNotificationCenter.defaultCenter().postNotificationName(KeyboardDidChangeNotification, object: nil, userInfo: [KeyboardNotificationInfo: keyboardInfo])
         })
@@ -57,18 +45,22 @@ public class Keyboard: Printable, DebugPrintable
     
     @objc func handleRotationNotification(notification: NSNotification)
     {
+        if !isKeyboardVisible {
+            rotationCount = 0
+            return
+        }
         if notification.name == UIApplicationWillChangeStatusBarFrameNotification {
-            //Workaround to deal with the nasty iOS 8's behaviour of sending 4 keyboard notifications when rotating
-            rotationCount = 2
+            rotationCount = 4
         }
     }
     
-    private init(finalTransitionRect: CGRect, transitionDuration: NSNumber, transitionAnimationOptions: UIViewAnimationOptions, isPresenting: Bool)
+    private init(finalTransitionRect: CGRect, transitionDuration: NSNumber, transitionAnimationOptions: UIViewAnimationOptions, isPresenting: Bool, forRotation: Bool)
     {
         self.finalTransitionRect = finalTransitionRect
         self.transitionDuration = transitionDuration
         self.transitionAnimationOptions = transitionAnimationOptions
         self.isPresenting = isPresenting
+        self.forRotation = forRotation
     }
     
     //MARK: Public
@@ -77,6 +69,7 @@ public class Keyboard: Printable, DebugPrintable
     public let transitionDuration: NSNumber
     public let transitionAnimationOptions: UIViewAnimationOptions
     public let isPresenting: Bool
+    public let forRotation: Bool
     
     //The keyboard's visibility status
     public static var visible: Bool {

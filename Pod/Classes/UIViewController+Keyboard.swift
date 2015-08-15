@@ -1,4 +1,5 @@
 import Keyboard
+import ObjectiveC
 
 //MARK: - Basic Keyboard Handling
 @objc public protocol KeyboardHandler
@@ -14,17 +15,26 @@ import Keyboard
     weak var currentTextElement: UIResponder? { get set }
 }
 
+private struct AssociationKeys
+{
+    static var CurrentTextElementKey = "CurrentTextElementKey"
+    static var HandlesKeyboardKey = "HandlesKeyboardKey"
+    static var BottomConstraintForKeyboardKey = "BottomConstraintForKeyboardKey"
+    static var ViewToMoveForKeyboardKey = "ViewToMoveForKeyboardKey"
+    static var OriginalConstantKey = "OriginalConstantKey"
+}
+
 extension UIViewController: ActiveTextElementHandler
 {
-    @IBOutlet weak public var currentTextElement: UIResponder? {
+    weak public var currentTextElement: UIResponder? {
         get {
-            if var result = objc_getAssociatedObject(self, "currentTextElement") as? UIResponder {
+            if var result = objc_getAssociatedObject(self, &AssociationKeys.CurrentTextElementKey) as? UIResponder {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, "currentTextElement", newValue, UInt(OBJC_ASSOCIATION_ASSIGN) as objc_AssociationPolicy)
+            objc_setAssociatedObject(self, &AssociationKeys.CurrentTextElementKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
         }
     }
     
@@ -37,6 +47,7 @@ extension UIViewController: ActiveTextElementHandler
         if self.currentTextElement == textField {
             self.currentTextElement = nil
         }
+        
     }
     
     public func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -69,95 +80,107 @@ extension UIViewController: ActiveTextElementHandler
     weak var viewToMoveForKeyboard: UIView? { get set }
 }
 
-public var KeyboardInconsistencyCurrentViewControllerUserInfoKey: String {
-    return "KeyboardInconsistencyCurrentViewControllerUserInfoKey"
-}
-
 extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
 {
     @IBInspectable public var handlesKeyboard: Bool {
         get {
-            if var result = objc_getAssociatedObject(self, "handlesKeyboard") as? Bool {
+            if var result = objc_getAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey) as? Bool {
                 return result
             }
             return false
         }
         set {
-            if self.bottomConstraintForKeyboard == nil && self.viewToMoveForKeyboard == nil
-            { // Validating the View Controller's setup
-                NSException(name: NSInternalInconsistencyException, reason: "To correctly handle the keyboard, View Controllers must either set 'bottomConstraintForKeyboard' or 'viewToMoveForKeyboard'.", userInfo: [KeyboardInconsistencyCurrentViewControllerUserInfoKey: self]).raise()
-                return
-            }
-            
-            objc_setAssociatedObject(self, "handlesKeyboard", newValue, UInt(OBJC_ASSOCIATION_RETAIN) as objc_AssociationPolicy)
+            objc_setAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
             //Dummy call to initialize the Keyboard singleton
             Keyboard.visible
-            if newValue != self.handlesKeyboard {
-                if newValue {
-                    if self.originalConstant == nil {
-                        self.originalConstant = self.bottomConstraintForKeyboard != nil ? self.bottomConstraintForKeyboard!.constant : self.viewToMoveForKeyboard!.frame.origin.y
-                    }
-                    NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardDidChangeNotification:", name: KeyboardDidChangeNotification, object: nil)
-                } else {
-                    self.originalConstant = nil
-                    NSNotificationCenter.defaultCenter().removeObserver(self, name: KeyboardDidChangeNotification, object: nil)
-                }
+            if newValue {
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardDidChangeNotification:", name: KeyboardDidChangeNotification, object: nil)
+            } else {
+                self.originalConstant = nil
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: KeyboardDidChangeNotification, object: nil)
             }
         }
     }
     
     @IBOutlet public weak var bottomConstraintForKeyboard: NSLayoutConstraint? {
         get {
-            if var result = objc_getAssociatedObject(self, "bottomConstraintForKeyboard") as? NSLayoutConstraint {
+            if var result = objc_getAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey) as? NSLayoutConstraint {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, "bottomConstraintForKeyboard", newValue, UInt(OBJC_ASSOCIATION_ASSIGN) as objc_AssociationPolicy)
+            if newValue != nil {
+                if self.originalConstant == nil {
+                    self.originalConstant = newValue!.constant
+                }
+            } else {
+                self.originalConstant = nil
+            }
+            objc_setAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
         }
     }
     
     @IBOutlet public weak var viewToMoveForKeyboard: UIView? {
         get {
-            if var result = objc_getAssociatedObject(self, "viewToMoveForKeyboard") as? UIView {
+            if var result = objc_getAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey) as? UIView {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, "viewToMoveForKeyboard", newValue, UInt(OBJC_ASSOCIATION_ASSIGN) as objc_AssociationPolicy)
+            if newValue != nil {
+                if self.originalConstant == nil {
+                    self.originalConstant = newValue!.frame.origin.y
+                }
+            } else {
+                self.originalConstant = nil
+            }
+            objc_setAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
         }
     }
     
     private var originalConstant: CGFloat? {
         get {
-            if var result = objc_getAssociatedObject(self, "originalConstant") as? CGFloat {
+            if var result = objc_getAssociatedObject(self, &AssociationKeys.OriginalConstantKey) as? CGFloat {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, "originalConstant", newValue, UInt(OBJC_ASSOCIATION_RETAIN) as objc_AssociationPolicy)
+            objc_setAssociatedObject(self, &AssociationKeys.OriginalConstantKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
         }
     }
     
     @objc public func handleKeyboardDidChangeNotification(notification: NSNotification)
     {
+        if self.originalConstant == nil
+        { // Validating the View Controller's setup
+            assertionFailure("To correctly handle the keyboard, View Controllers must either set 'bottomConstraintForKeyboard' or 'viewToMoveForKeyboard' in: \(self.classForCoder)")
+        }
         if var keyboard = notification.userInfo?[KeyboardNotificationInfo] as? Keyboard {
             var animationBlock: (() -> Void)?
             if keyboard.isPresenting {
-                if var distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement! as? UIView, withSender: self) {
+                if var distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {
                     animationBlock = self.createAnimationBlock(true, distance: CGFloat(distance))
                 }
             } else {
                 animationBlock = self.createAnimationBlock(false, distance: nil)
             }
+            if animationBlock == nil {
+                return
+            }
             UIView.animateWithDuration(keyboard.transitionDuration.doubleValue as NSTimeInterval,
                 delay: 0.0,
                 options: keyboard.transitionAnimationOptions,
                 animations: animationBlock!,
-                completion: nil)
+                completion:
+            { [unowned self] (finished: Bool) -> Void in
+                if finished && !keyboard.forRotation && !keyboard.isPresenting {
+                    self.currentTextElement?.resignFirstResponder()
+                    self.currentTextElement = nil
+                }
+            })
         }
     }
     
@@ -168,13 +191,12 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
         let constant = self.originalConstant!
         if var constraint = self.bottomConstraintForKeyboard {
             if isPresenting {
-                result = { ()->Void in
-                    constraint.constant = CGFloat(distance!) + constant
-                }
+                constraint.constant = CGFloat(distance!) + constant
             } else {
-                result = { ()->Void in
-                    constraint.constant = constant
-                }
+                constraint.constant = constant
+            }
+            result = { [unowned self] ()->Void in
+                self.view.layoutIfNeeded()
             }
         } else if var view = self.viewToMoveForKeyboard {
             if isPresenting {
