@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name             = "Keyboard"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "Never implement UIKeyboardDidShowNotification ever again."
   s.description      = <<-DESC
-                       Ever.
+                       Never implement UIKeyboardDidShowNotification ever again. Ever. Really.
                        DESC
   s.homepage         = "https://github.com/BellAppLab/Keyboard"
   s.license          = 'MIT'
