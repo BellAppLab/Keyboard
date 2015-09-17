@@ -14,6 +14,8 @@
 		65C4D4951B7DE9F7001173ED /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C4D4941B7DE9F7001173ED /* UIViewController+Keyboard.swift */; };
 		65C4D4961B7DE9F7001173ED /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C4D4941B7DE9F7001173ED /* UIViewController+Keyboard.swift */; };
 		65C4D4971B7DE9F7001173ED /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C4D4941B7DE9F7001173ED /* UIViewController+Keyboard.swift */; };
+		65E9C2771BAB804A00C22BE5 /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A255C507BC1703B3C90C118C1207401D /* Keyboard.swift */; settings = {ASSET_TAGS = (); }; };
+		65E9C2781BAB804B00C22BE5 /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A255C507BC1703B3C90C118C1207401D /* Keyboard.swift */; settings = {ASSET_TAGS = (); }; };
 		81D6F3388C29D692CA3CEC074C4C49C8 /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A255C507BC1703B3C90C118C1207401D /* Keyboard.swift */; };
 		8F2968D408A00EC72088E714EE4842B4 /* Pods-Keyboard_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FF16EAC55E5E07BA2AA5A10B1312B8 /* Pods-Keyboard_Example-dummy.m */; };
 		A5EB22C62CBCBEF63107A001581B4C24 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6DC915AB9C4B57B148B90CB4ECEDEA /* Foundation.framework */; };
@@ -361,6 +363,7 @@
 		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 			};
@@ -415,6 +418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				083FBB2D85B2692AA32B8AA076B90F77 /* Pods-Keyboard_Tests-dummy.m in Sources */,
+				65E9C2781BAB804B00C22BE5 /* Keyboard.swift in Sources */,
 				65C4D4971B7DE9F7001173ED /* UIViewController+Keyboard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,6 +438,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F2968D408A00EC72088E714EE4842B4 /* Pods-Keyboard_Example-dummy.m in Sources */,
+				65E9C2771BAB804A00C22BE5 /* Keyboard.swift in Sources */,
 				65C4D4961B7DE9F7001173ED /* UIViewController+Keyboard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

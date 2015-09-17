@@ -1,6 +1,6 @@
 import UIKit
 
-public class Keyboard: Printable, DebugPrintable
+public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
 {
     //MARK: Private
     //Handling notifications and the keyboard rect
@@ -13,7 +13,7 @@ public class Keyboard: Printable, DebugPrintable
     
     private convenience init()
     {
-        self.init(finalTransitionRect: CGRectZero, transitionDuration: 0, transitionAnimationOptions: UIViewAnimationOptions.allZeros, isPresenting: false, forRotation: false)
+        self.init(finalTransitionRect: CGRectZero, transitionDuration: 0, transitionAnimationOptions: UIViewAnimationOptions(), isPresenting: false, forRotation: false)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleRotationNotification:", name: UIApplicationWillChangeStatusBarFrameNotification, object: UIApplication.sharedApplication())
@@ -26,15 +26,15 @@ public class Keyboard: Printable, DebugPrintable
     
     @objc func handleKeyboardNotification(notification: NSNotification)
     {
-        var wereRotating = areWeRotating
+        let wereRotating = areWeRotating
         
         if wereRotating {
             rotationCount--
         }
         
         let userInfo = notification.userInfo!
-        var duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber
-        let animationOptions = UIViewAnimationOptions(rawValue: (userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedLongValue) | .BeginFromCurrentState
+        let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber
+        let animationOptions = UIViewAnimationOptions(rawValue: (userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedLongValue).union(.BeginFromCurrentState)
         self.isKeyboardVisible = notification.name == UIKeyboardWillShowNotification
         self.currentKeyboardFrame = self.isKeyboardVisible ? UIApplication.sharedApplication().keyWindow!.convertRect((userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue(), fromWindow: nil) : CGRectZero
         let keyboardInfo = Keyboard(finalTransitionRect: self.currentKeyboardFrame, transitionDuration: duration, transitionAnimationOptions: animationOptions, isPresenting: self.isKeyboardVisible, forRotation: wereRotating)
@@ -79,7 +79,7 @@ public class Keyboard: Printable, DebugPrintable
     //Checking if the keyboard is being laid out over an element
     public static func howMuchShouldThisViewMove(view: UIView?, withSender sender: UIViewController) -> Double?
     {
-        if var finalView = view {
+        if let finalView = view {
             let viewRect = sender.view.convertRect(finalView.frame, fromView: nil)
             let viewsBottom = viewRect.origin.y + viewRect.size.height
             let keyboardsTop = sender.view.bounds.size.height - privateKeyboard.currentKeyboardFrame.size.height

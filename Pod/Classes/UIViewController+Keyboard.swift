@@ -1,5 +1,5 @@
-import Keyboard
 import ObjectiveC
+
 
 //MARK: - Basic Keyboard Handling
 @objc public protocol KeyboardHandler
@@ -28,13 +28,13 @@ extension UIViewController: ActiveTextElementHandler
 {
     weak public var currentTextElement: UIResponder? {
         get {
-            if var result = objc_getAssociatedObject(self, &AssociationKeys.CurrentTextElementKey) as? UIResponder {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.CurrentTextElementKey) as? UIResponder {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, &AssociationKeys.CurrentTextElementKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
+            objc_setAssociatedObject(self, &AssociationKeys.CurrentTextElementKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
         }
     }
     
@@ -84,13 +84,13 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
 {
     @IBInspectable public var handlesKeyboard: Bool {
         get {
-            if var result = objc_getAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey) as? Bool {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey) as? Bool {
                 return result
             }
             return false
         }
         set {
-            objc_setAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &AssociationKeys.HandlesKeyboardKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             //Dummy call to initialize the Keyboard singleton
             Keyboard.visible
             if newValue {
@@ -104,7 +104,7 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
     
     @IBOutlet public weak var bottomConstraintForKeyboard: NSLayoutConstraint? {
         get {
-            if var result = objc_getAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey) as? NSLayoutConstraint {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey) as? NSLayoutConstraint {
                 return result
             }
             return nil
@@ -117,13 +117,13 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             } else {
                 self.originalConstant = nil
             }
-            objc_setAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
+            objc_setAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
         }
     }
     
     @IBOutlet public weak var viewToMoveForKeyboard: UIView? {
         get {
-            if var result = objc_getAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey) as? UIView {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey) as? UIView {
                 return result
             }
             return nil
@@ -136,19 +136,19 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             } else {
                 self.originalConstant = nil
             }
-            objc_setAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey, newValue, UInt(OBJC_ASSOCIATION_ASSIGN))
+            objc_setAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
         }
     }
     
     private var originalConstant: CGFloat? {
         get {
-            if var result = objc_getAssociatedObject(self, &AssociationKeys.OriginalConstantKey) as? CGFloat {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.OriginalConstantKey) as? CGFloat {
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, &AssociationKeys.OriginalConstantKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+            objc_setAssociatedObject(self, &AssociationKeys.OriginalConstantKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -158,10 +158,10 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
         { // Validating the View Controller's setup
             assertionFailure("To correctly handle the keyboard, View Controllers must either set 'bottomConstraintForKeyboard' or 'viewToMoveForKeyboard' in: \(self.classForCoder)")
         }
-        if var keyboard = notification.userInfo?[KeyboardNotificationInfo] as? Keyboard {
+        if let keyboard = notification.userInfo?[KeyboardNotificationInfo] as? Keyboard {
             var animationBlock: (() -> Void)?
             if keyboard.isPresenting {
-                if var distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {
+                if let distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {
                     animationBlock = self.createAnimationBlock(true, distance: CGFloat(distance))
                 }
             } else {
@@ -189,7 +189,7 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
     {
         var result: () -> Void
         let constant = self.originalConstant!
-        if var constraint = self.bottomConstraintForKeyboard {
+        if let constraint = self.bottomConstraintForKeyboard {
             if isPresenting {
                 constraint.constant = CGFloat(distance!) + constant
             } else {
@@ -198,7 +198,7 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             result = { [unowned self] ()->Void in
                 self.view.layoutIfNeeded()
             }
-        } else if var view = self.viewToMoveForKeyboard {
+        } else if let view = self.viewToMoveForKeyboard {
             if isPresenting {
                 result = { ()->Void in
                     view.frame = CGRectMake(view.frame.origin.x, constant - CGFloat(distance!), view.frame.size.width, view.frame.size.height)
