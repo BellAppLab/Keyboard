@@ -73,12 +73,12 @@ extension UIViewController: ActiveTextElementHandler
 
 @objc public protocol AutoLayoutKeyboardHandler: KeyboardHandler
 {
-    weak var bottomConstraintForKeyboard: NSLayoutConstraint? { get set }
+    var constraintsForKeyboard: [NSLayoutConstraint]? { get set }
 }
 
 @objc public protocol FrameBasedKeyboardHandler: KeyboardHandler
 {
-    weak var viewToMoveForKeyboard: UIView? { get set }
+    var viewsToMoveForKeyboard: [UIView]? { get set }
 }
 
 extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
@@ -97,67 +97,87 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             if newValue {
                 NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardDidChangeNotification:", name: KeyboardDidChangeNotification, object: nil)
             } else {
-                self.originalConstant = nil
+                self.originalConstants = nil
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: KeyboardDidChangeNotification, object: nil)
             }
         }
     }
     
-    @IBOutlet public weak var bottomConstraintForKeyboard: NSLayoutConstraint? {
+    @IBOutlet public var constraintsForKeyboard: [NSLayoutConstraint]? {
         get {
-            if let result = objc_getAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey) as? NSLayoutConstraint {
+            if let nsArray = objc_getAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey) as? NSArray {
+                var result = [NSLayoutConstraint]()
+                for object in nsArray {
+                    result.append(object as! NSLayoutConstraint)
+                }
                 return result
             }
             return nil
         }
         set {
             if newValue != nil {
-                if self.originalConstant == nil {
-                    self.originalConstant = newValue!.constant
+                if self.originalConstants == nil {
+                    var constants = [CGFloat]()
+                    for constraint in newValue! {
+                        constants.append(constraint.constant)
+                    }
+                    self.originalConstants = constants
                 }
             } else {
-                self.originalConstant = nil
+                self.originalConstants = nil
             }
-            objc_setAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociationKeys.BottomConstraintForKeyboardKey, newValue != nil ? NSArray(array: newValue!) : nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
-    @IBOutlet public weak var viewToMoveForKeyboard: UIView? {
+    @IBOutlet public var viewsToMoveForKeyboard: [UIView]? {
         get {
-            if let result = objc_getAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey) as? UIView {
+            if let nsArray = objc_getAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey) as? NSArray {
+                var result = [UIView]()
+                for object in nsArray {
+                    result.append(object as! UIView)
+                }
                 return result
             }
             return nil
         }
         set {
             if newValue != nil {
-                if self.originalConstant == nil {
-                    self.originalConstant = newValue!.frame.origin.y
+                if self.originalConstants == nil {
+                    var constants = [CGFloat]()
+                    for view in newValue! {
+                        constants.append(view.frame.origin.y)
+                    }
+                    self.originalConstants = constants
                 }
             } else {
-                self.originalConstant = nil
+                self.originalConstants = nil
             }
-            objc_setAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociationKeys.ViewToMoveForKeyboardKey, newValue != nil ? NSArray(array: newValue!) : nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
-    private var originalConstant: CGFloat? {
+    private var originalConstants: [CGFloat]? {
         get {
-            if let result = objc_getAssociatedObject(self, &AssociationKeys.OriginalConstantKey) as? CGFloat {
+            if let nsArray = objc_getAssociatedObject(self, &AssociationKeys.OriginalConstantKey) as? NSArray {
+                var result = [CGFloat]()
+                for object in nsArray {
+                    result.append(object as! CGFloat)
+                }
                 return result
             }
             return nil
         }
         set {
-            objc_setAssociatedObject(self, &AssociationKeys.OriginalConstantKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociationKeys.OriginalConstantKey, newValue != nil ? NSArray(array: newValue!) : nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
     @objc public func handleKeyboardDidChangeNotification(notification: NSNotification)
     {
-        if self.originalConstant == nil
+        if self.originalConstants == nil
         { // Validating the View Controller's setup
-            assertionFailure("To correctly handle the keyboard, View Controllers must either set 'bottomConstraintForKeyboard' or 'viewToMoveForKeyboard' in: \(self.classForCoder)")
+            assertionFailure("To correctly handle the keyboard, View Controllers must either set 'constraintsForKeyboard' or 'viewsToMoveForKeyboard' in: \(self.classForCoder)")
         }
         if let keyboard = notification.userInfo?[KeyboardNotificationInfo] as? Keyboard {
             var animationBlock: (() -> Void)?
@@ -189,24 +209,40 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
     private func createAnimationBlock(isPresenting: Bool, distance: CGFloat?) -> () -> Void
     {
         var result: () -> Void
-        let constant = self.originalConstant!
-        if let constraint = self.bottomConstraintForKeyboard {
+        let constants = self.originalConstants!
+        if let constraints = self.constraintsForKeyboard {
             if isPresenting {
-                constraint.constant = CGFloat(distance!) + constant
+                constraints.forEach { (constraint: NSLayoutConstraint) -> () in
+                    constants.forEach { (constant: CGFloat) -> () in
+                        constraint.constant = CGFloat(distance!) + constant
+                    }
+                }
             } else {
-                constraint.constant = constant
+                constraints.forEach { (constraint: NSLayoutConstraint) -> () in
+                    constants.forEach { (constant: CGFloat) -> () in
+                        constraint.constant = constant
+                    }
+                }
             }
             result = { [unowned self] ()->Void in
                 self.view.layoutIfNeeded()
             }
-        } else if let view = self.viewToMoveForKeyboard {
+        } else if let views = self.viewsToMoveForKeyboard {
             if isPresenting {
                 result = { ()->Void in
-                    view.frame = CGRectMake(view.frame.origin.x, constant - CGFloat(distance!), view.frame.size.width, view.frame.size.height)
+                    views.forEach { (view: UIView) -> () in
+                        constants.forEach { (constant: CGFloat) -> () in
+                            view.frame = CGRectMake(view.frame.origin.x, constant - CGFloat(distance!), view.frame.size.width, view.frame.size.height)
+                        }
+                    }
                 }
             } else {
                 result = { ()->Void in
-                    view.frame = CGRectMake(view.frame.origin.x, constant, view.frame.size.width, view.frame.size.height)
+                    views.forEach { (view: UIView) -> () in
+                        constants.forEach { (constant: CGFloat) -> () in
+                            view.frame = CGRectMake(view.frame.origin.x, constant, view.frame.size.width, view.frame.size.height)
+                        }
+                    }
                 }
             }
         } else {
