@@ -9,17 +9,17 @@
 
 ![Screenshots/Screenshot.png](Screenshots/Screenshot.png)
 
-# Step 1:
+### Step 1:
 
 ctrl + drag to your favorite layout constraint
 
-# Step 2: 
+### Step 2: 
 
 Set your view controller's `handlesKeyboard` option to 'on'
 
-# Step 3:
+### Step 3:
 
-**Get on with your life **
+**Get on with your life**
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
