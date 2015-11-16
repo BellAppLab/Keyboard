@@ -184,6 +184,8 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             if keyboard.isPresenting {
                 if let distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {
                     animationBlock = self.createAnimationBlock(true, distance: CGFloat(distance))
+                } else {
+                    animationBlock = self.createAnimationBlock(true, distance: keyboard.finalTransitionRect.height)
                 }
             } else {
                 animationBlock = self.createAnimationBlock(false, distance: nil)

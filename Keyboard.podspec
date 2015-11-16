@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Keyboard"
-  s.version          = "0.3.0"
+  s.version          = "0.3.1"
   s.summary          = "Never implement UIKeyboardDidShowNotification ever again."
   s.description      = <<-DESC
                        Never implement UIKeyboardDidShowNotification ever again. Ever. Really.
