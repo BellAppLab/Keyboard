@@ -6,10 +6,10 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
     //MARK: Consts
     private static let privateKeyboard = Keyboard()
     public static func domain() -> String {
-        return  "com.bellapplab"
+        return  "com.bellapplab.Keyboard"
     }
-    public static let DidChangeNotification = "\(Keyboard.domain()).KeyboardDidChangeNotification"
-    public static let NotificationInfo = "KeyboardNotificationInfo"
+    public static let DidChangeNotification = "\(Keyboard.domain()).DidChangeNotification"
+    public static let NotificationInfo = "NotificationInfo"
     
     //MARK: Private
     //Handling notifications and the keyboard rect
