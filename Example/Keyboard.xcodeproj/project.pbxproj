@@ -13,8 +13,8 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		667A202D3CD45E4E1EB53C3D /* Pods_Keyboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6A07EEBAE83F850E9D48189 /* Pods_Keyboard_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		BB350BACDC9B8F3313FB3C75 /* Pods_Keyboard_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673915EC17BC741C3F79FB3F /* Pods_Keyboard_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		667A202D3CD45E4E1EB53C3D /* Pods_Keyboard_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6A07EEBAE83F850E9D48189 /* Pods_Keyboard_Example.framework */; };
+		BB350BACDC9B8F3313FB3C75 /* Pods_Keyboard_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673915EC17BC741C3F79FB3F /* Pods_Keyboard_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

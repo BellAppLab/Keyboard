@@ -95,10 +95,10 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             //Dummy call to initialize the Keyboard singleton
             Keyboard.visible
             if newValue {
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardDidChangeNotification:", name: KeyboardDidChangeNotification, object: nil)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardDidChangeNotification:", name: Keyboard.DidChangeNotification, object: nil)
             } else {
                 self.originalConstants = nil
-                NSNotificationCenter.defaultCenter().removeObserver(self, name: KeyboardDidChangeNotification, object: nil)
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: Keyboard.DidChangeNotification, object: nil)
             }
         }
     }
@@ -179,7 +179,7 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
         { // Validating the View Controller's setup
             assertionFailure("To correctly handle the keyboard, View Controllers must either set 'constraintsForKeyboard' or 'viewsToMoveForKeyboard' in: \(self.classForCoder)")
         }
-        if let keyboard = notification.userInfo?[KeyboardNotificationInfo] as? Keyboard {
+        if let keyboard = notification.userInfo?[Keyboard.NotificationInfo] as? Keyboard {
             var animationBlock: (() -> Void)?
             if keyboard.isPresenting {
                 if let distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {

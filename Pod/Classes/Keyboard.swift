@@ -1,7 +1,16 @@
 import UIKit
 
+
 public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
 {
+    //MARK: Consts
+    private static let privateKeyboard = Keyboard()
+    public static func domain() -> String {
+        return  "com.bellapplab"
+    }
+    public static let DidChangeNotification = "\(Keyboard.domain()).KeyboardDidChangeNotification"
+    public static let NotificationInfo = "KeyboardNotificationInfo"
+    
     //MARK: Private
     //Handling notifications and the keyboard rect
     private var isKeyboardVisible: Bool = false
@@ -39,7 +48,7 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
         self.currentKeyboardFrame = self.isKeyboardVisible ? UIApplication.sharedApplication().keyWindow!.convertRect((userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue(), fromWindow: nil) : CGRectZero
         let keyboardInfo = Keyboard(finalTransitionRect: self.currentKeyboardFrame, transitionDuration: duration, transitionAnimationOptions: animationOptions, isPresenting: self.isKeyboardVisible, forRotation: wereRotating)
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            NSNotificationCenter.defaultCenter().postNotificationName(KeyboardDidChangeNotification, object: nil, userInfo: [KeyboardNotificationInfo: keyboardInfo])
+            NSNotificationCenter.defaultCenter().postNotificationName(Keyboard.DidChangeNotification, object: nil, userInfo: [Keyboard.NotificationInfo: keyboardInfo])
         })
     }
     
@@ -104,6 +113,3 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
         #endif
     }
 }
-private let privateKeyboard = Keyboard()
-public let KeyboardDidChangeNotification = "com.bellapplab.KeyboardDidChangeNotification"
-public let KeyboardNotificationInfo = "KeyboardNotificationInfo"
