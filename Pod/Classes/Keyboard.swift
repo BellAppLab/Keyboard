@@ -23,9 +23,9 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
     private convenience init()
     {
         self.init(finalTransitionRect: CGRectZero, transitionDuration: 0, transitionAnimationOptions: UIViewAnimationOptions(), isPresenting: false, forRotation: false)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleKeyboardNotification:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleRotationNotification:", name: UIApplicationWillChangeStatusBarFrameNotification, object: UIApplication.sharedApplication())
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Keyboard.handleKeyboardNotification(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Keyboard.handleKeyboardNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Keyboard.handleRotationNotification(_:)), name: UIApplicationWillChangeStatusBarFrameNotification, object: UIApplication.sharedApplication())
     }
     
     deinit
@@ -38,7 +38,7 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
         let wereRotating = areWeRotating
         
         if wereRotating {
-            rotationCount--
+            rotationCount -= 1
         }
         
         let userInfo = notification.userInfo!
