@@ -88,15 +88,12 @@ public class Keyboard: CustomStringConvertible, CustomDebugStringConvertible
     //Checking if the keyboard is being laid out over an element
     public static func howMuchShouldThisViewMove(view: UIView?, withSender sender: UIViewController) -> Double?
     {
-        if let finalView = view {
-            let viewRect = sender.view.convertRect(finalView.frame, fromView: nil)
-            let viewsBottom = viewRect.origin.y + viewRect.size.height
-            let keyboardsTop = sender.view.bounds.size.height - privateKeyboard.currentKeyboardFrame.size.height
-            if viewsBottom > keyboardsTop {
-                return Double(viewsBottom - keyboardsTop + 40)
-            }
-        }
-        return nil
+        guard let finalView = view else { return nil }
+        let viewRect = sender.view.convertRect(finalView.frame, fromView: nil)
+        let viewsBottom = viewRect.origin.y + viewRect.size.height + 40
+        let keyboardsTop = sender.view.bounds.size.height - privateKeyboard.currentKeyboardFrame.size.height
+        guard viewsBottom > keyboardsTop else { return nil }
+        return Double(viewsBottom - keyboardsTop)
     }
     
     //MARK: Printable

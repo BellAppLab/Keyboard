@@ -1,14 +1,14 @@
 PODS:
-  - Keyboard (0.3.1)
+  - Keyboard (0.4)
 
 DEPENDENCIES:
   - Keyboard (from `../`)
 
 EXTERNAL SOURCES:
   Keyboard:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  Keyboard: b47c7b995a60f7988e0a95b425d1d7d3f1f8b57a
+  Keyboard: 964eccb2d1cc4b100db7cf3d04a73d27517910d0
 
 COCOAPODS: 0.39.0

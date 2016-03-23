@@ -6,6 +6,7 @@ import UIKit
 @objc public protocol KeyboardHandler
 {
     var handlesKeyboard: Bool { get set }
+    var movesStuffForKeyboardFromBottom: Bool { get set }
     @objc func handleKeyboardDidChangeNotification(notification: NSNotification)
 }
 
@@ -23,6 +24,7 @@ private struct AssociationKeys
     static var BottomConstraintForKeyboardKey = "BottomConstraintForKeyboardKey"
     static var ViewToMoveForKeyboardKey = "ViewToMoveForKeyboardKey"
     static var OriginalConstantKey = "OriginalConstantKey"
+    static var KeyboardReferenceKey = "KeyboardReferenceKey"
 }
 
 extension UIViewController: ActiveTextElementHandler
@@ -100,6 +102,18 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
                 self.originalConstants = nil
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: Keyboard.DidChangeNotification, object: nil)
             }
+        }
+    }
+    
+    @IBInspectable public var movesStuffForKeyboardFromBottom: Bool {
+        get {
+            if let result = objc_getAssociatedObject(self, &AssociationKeys.KeyboardReferenceKey) as? Bool {
+                return result
+            }
+            return true
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociationKeys.KeyboardReferenceKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -184,9 +198,10 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             if keyboard.isPresenting {
                 if let distance = Keyboard.howMuchShouldThisViewMove(self.currentTextElement as? UIView, withSender: self) {
                     animationBlock = self.createAnimationBlock(true, distance: CGFloat(distance))
-                } else {
-                    animationBlock = self.createAnimationBlock(true, distance: keyboard.finalTransitionRect.height)
                 }
+//                else {
+//                    animationBlock = self.createAnimationBlock(true, distance: keyboard.finalTransitionRect.height)
+//                }
             } else {
                 animationBlock = self.createAnimationBlock(false, distance: nil)
             }
@@ -214,9 +229,10 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
         let constants = self.originalConstants!
         if let constraints = self.constraintsForKeyboard {
             if isPresenting {
+                let fromBottom = movesStuffForKeyboardFromBottom
                 constraints.forEach { (constraint: NSLayoutConstraint) -> () in
                     constants.forEach { (constant: CGFloat) -> () in
-                        constraint.constant = CGFloat(distance!) + constant
+                        constraint.constant = fromBottom ? CGFloat(distance!) + constant : CGFloat(distance!) - constant
                     }
                 }
             } else {
@@ -231,10 +247,11 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             }
         } else if let views = self.viewsToMoveForKeyboard {
             if isPresenting {
+                let fromBottom = movesStuffForKeyboardFromBottom
                 result = { ()->Void in
                     views.forEach { (view: UIView) -> () in
                         constants.forEach { (constant: CGFloat) -> () in
-                            view.frame = CGRectMake(view.frame.origin.x, constant - CGFloat(distance!), view.frame.size.width, view.frame.size.height)
+                            view.frame = CGRectMake(view.frame.origin.x, fromBottom ? constant - CGFloat(distance!) : constant + CGFloat(distance!), view.frame.size.width, view.frame.size.height)
                         }
                     }
                 }
