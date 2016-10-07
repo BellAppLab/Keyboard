@@ -1,9 +1,8 @@
 # Keyboard
 
-[![CI Status](http://img.shields.io/travis/Bell App Lab/Keyboard.svg?style=flat)](https://travis-ci.org/Bell App Lab/Keyboard)
-[![Version](https://img.shields.io/cocoapods/v/Keyboard.svg?style=flat)](http://cocoapods.org/pods/Keyboard)
-[![License](https://img.shields.io/cocoapods/l/Keyboard.svg?style=flat)](http://cocoapods.org/pods/Keyboard)
-[![Platform](https://img.shields.io/cocoapods/p/Keyboard.svg?style=flat)](http://cocoapods.org/pods/Keyboard)
+Never implement UIKeyboardDidShowNotification ever again. Ever.
+
+_v0.6.0_
 
 ## Usage
 
@@ -23,8 +22,6 @@ Set your view controller's `handlesKeyboard` option to 'on'
 
 ======
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 **Please note** that the Simulator (iPhone 6s Plus / iOS 9.1 / 13B137) may not send the appropriate `UIKeyboardWillShowNotification`s. Pressing `cmd+K` while running on the Simulator may help. Nonetheless the Example app has been tested on a device running iOS 9.1 (13B143) and works. 
 
 **Also please note** that you may get the following messages on the console (which don't affect the library in any way):
@@ -34,18 +31,14 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-iOS 8+
+* iOS 8+
+* Swift 3.0
 
 ## Installation
 
-### CocoaPods
+### Cocoapods
 
-Keyboard is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod "Keyboard"
-```
+Because of [this](http://stackoverflow.com/questions/39637123/cocoapods-app-xcworkspace-does-not-exists), I've dropped support for Cocoapods on this repo. I cannot have production code rely on a dependency manager that breaks this badly. 
 
 ### Git Submodules
 
@@ -57,10 +50,10 @@ To install Keyboard using git submodules:
 
 ```
 cd toYourProjectsFolder
-git submodule add -b Submodule --name Keyboard https://github.com/BellAppLab/Keyboard.git
+git submodule add -b submodule --name Keyboard https://github.com/BellAppLab/Keyboard.git
 ```
 
-Navigate to the new Keyboard folder and drag the Pods folder to your Xcode project.
+Navigate to the new Keyboard folder and drag the `Source` folder into your Xcode project.
 
 ## Author
 

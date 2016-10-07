@@ -97,10 +97,10 @@ extension UIViewController: AutoLayoutKeyboardHandler, FrameBasedKeyboardHandler
             //Dummy call to initialize the Keyboard singleton
             Keyboard.visible
             if newValue {
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(KeyboardHandler.handleKeyboardDidChangeNotification(_:)), name: Keyboard.DidChangeNotification, object: nil)
+                NotificationCenter.defaultCenter().addObserver(self, selector: #selector(KeyboardHandler.handleKeyboardDidChangeNotification(_:)), name: Keyboard.DidChangeNotification, object: nil)
             } else {
                 self.originalConstants = nil
-                NSNotificationCenter.defaultCenter().removeObserver(self, name: Keyboard.DidChangeNotification, object: nil)
+                NotificationCenter.defaultCenter().removeObserver(self, name: Keyboard.DidChangeNotification, object: nil)
             }
         }
     }
