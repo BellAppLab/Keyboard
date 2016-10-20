@@ -53,7 +53,13 @@ cd toYourProjectsFolder
 git submodule add -b submodule --name Keyboard https://github.com/BellAppLab/Keyboard.git
 ```
 
-Navigate to the new Keyboard folder and drag the `Source` folder into your Xcode project.
+**Swift 2 support**
+
+```
+git submodule add -b swift2 --name Keyboard.git https://github.com/BellAppLab/Keyboard.git
+```
+
+Then, navigate to the new Keyboard folder and drag the `Source` folder into your Xcode project.
 
 ## Author
 
