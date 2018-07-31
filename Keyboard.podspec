@@ -28,7 +28,7 @@ So instead of doing a whole lot of calculations, or embedding everything in `UIS
 
   s.source_files        = "Sources/Keyboard"
 
-  s.frameworks          = "Foundation", "ObjectiveC"
+  s.frameworks          = "Foundation"
   s.ios.framework       = "UIKit"
 
 end
