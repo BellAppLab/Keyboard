@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="Tdz-JV-2lu">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Frame-->
+        <scene sceneID="bRQ-8t-wJn">
+            <objects>
+                <viewController title="Frame" id="Tdz-JV-2lu" customClass="FrameViewController" customModule="iOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PI8-6m-1a0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Text field" textAlignment="natural" minimumFontSize="17" id="tM1-l1-vDf">
+                                <rect key="frame" x="148" y="318" width="80" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.41176470590000003" blue="0.85882352939999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="l8V-64-X5W" appends="YES" id="uJ5-gI-DqM"/>
+                        </connections>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Frame" id="etd-xw-hhG"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outletCollection property="keyboardViews" destination="tM1-l1-vDf" collectionClass="NSMutableArray" id="T1u-yc-szl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vAi-Ej-v54" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="l8V-64-X5W">
+                    <connections>
+                        <action selector="dismissTapped:" destination="Tdz-JV-2lu" id="Os6-fI-zUK"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="15.625" y="898.22666666666657"/>
+        </scene>
+    </scenes>
+</document>

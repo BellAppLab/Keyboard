@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hFI-mW-jO3">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Autolayout-->
+        <scene sceneID="H2z-CB-Vy2">
+            <objects>
+                <viewController title="Autolayout" id="hFI-mW-jO3" customClass="AutolayoutViewController" customModule="iOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dBi-Ps-YAL"/>
+                        <viewControllerLayoutGuide type="bottom" id="fBx-ks-71G"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fYZ-V0-tSp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Text field" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dud-08-dnS">
+                                <rect key="frame" x="147.5" y="418" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.1764705882" green="0.72941176470000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="fBx-ks-71G" firstAttribute="top" secondItem="dud-08-dnS" secondAttribute="bottom" constant="170" id="244-vj-1nE"/>
+                            <constraint firstItem="dud-08-dnS" firstAttribute="centerX" secondItem="fYZ-V0-tSp" secondAttribute="centerX" id="qbi-Zl-PSH"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="7kY-hd-YIh" appends="YES" id="pTO-Lx-3Ne"/>
+                        </connections>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Autolayout" id="M7Z-gO-EpY"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="handlesKeyboard" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outletCollection property="keyboardConstraints" destination="244-vj-1nE" collectionClass="NSMutableArray" id="ZGb-3B-jeJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kmr-fw-zSj" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="7kY-hd-YIh">
+                    <connections>
+                        <action selector="dismissTapped:" destination="hFI-mW-jO3" id="liE-0k-00Z"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-884" y="809"/>
+        </scene>
+    </scenes>
+</document>
