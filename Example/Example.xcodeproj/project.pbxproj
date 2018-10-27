@@ -336,19 +336,23 @@
 				TargetAttributes = {
 					65C83F6920FCDD37004F5620 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
 					65C83F8020FCDD4B004F5620 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					65C83F9120FCDD56004F5620 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = 65C83F6920FCDD37004F5620;
 					};
 					65C83F9F20FCDD5E004F5620 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = 65C83F6920FCDD37004F5620;
 					};
