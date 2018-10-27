@@ -156,22 +156,6 @@
 			path = Keyboard;
 			sourceTree = "<group>";
 		};
-		65C83F6420FCDCE7004F5620 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				65C83F6520FCDCE7004F5620 /* KeyboardTests */,
-			);
-			name = Tests;
-			path = ../Tests;
-			sourceTree = "<group>";
-		};
-		65C83F6520FCDCE7004F5620 /* KeyboardTests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = KeyboardTests;
-			sourceTree = "<group>";
-		};
 		65C83F6B20FCDD37004F5620 /* iOS Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,7 +222,6 @@
 				65C83F9320FCDD56004F5620 /* iOS Tests */,
 				65C83FA120FCDD5E004F5620 /* iOS UITests */,
 				65C83F8220FCDD4B004F5620 /* Keyboard_iOS */,
-				65C83F6420FCDCE7004F5620 /* Tests */,
 				65E75B4B1DA7DF2F000A44A9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -819,8 +802,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				VERSION = 1.0;
+				SWIFT_VERSION = 3.3;
+				VERSION = 1.0.1;
 			};
 			name = Debug;
 		};
@@ -872,9 +855,9 @@
 				PRODUCT_NAME = Keyboard;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.3;
 				VALIDATE_PRODUCT = YES;
-				VERSION = 1.0;
+				VERSION = 1.0.1;
 			};
 			name = Release;
 		};

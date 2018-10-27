@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name                = "Keyboard"
-  s.version             = "1.0.0"
+  s.version             = "1.0.1"
   s.summary             = "Never implement the UIKeyboardDidShow notification ever again. Ever."
   s.screenshot          = "https://github.com/BellAppLab/Keyboard/raw/master/Images/keyboard.png"
 

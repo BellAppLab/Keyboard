@@ -12,6 +12,6 @@ let package = Package(
         .target(
             name: "Keyboard"
         ),
-        ],
-    swiftLanguageVersions: [3, 4]
+    ],
+    swiftLanguageVersions: [3.3, 4.1, 4.2]
 )
