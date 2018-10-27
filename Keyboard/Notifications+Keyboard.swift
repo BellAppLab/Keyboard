@@ -1,6 +1,13 @@
 import UIKit
 
 
+#if swift(>=4.2)
+public typealias AnimationOptions = UIView.AnimationOptions
+#else
+public typealias AnimationOptions = UIViewAnimationOptions
+#endif
+
+
 //MARK: - MAIN
 @nonobjc
 public extension Keyboard {
@@ -14,13 +21,13 @@ public extension Keyboard {
         /// The keyboard's transition duration.
         public let transitionDuration: Double
         /// The keyboard's transition animation options.
-        public let transitionAnimationOptions: UIViewAnimationOptions
+        public let transitionAnimationOptions: AnimationOptions
 
         //MARK: - Setup
         private init(initialTransitionRect: CGRect,
                      finalTransitionRect: CGRect,
                      transitionDuration: Double,
-                     transitionAnimationOptions: UIViewAnimationOptions)
+                     transitionAnimationOptions: AnimationOptions)
         {
             self.initialTransitionRect = initialTransitionRect
             self.finalTransitionRect = finalTransitionRect
@@ -30,12 +37,20 @@ public extension Keyboard {
 
         fileprivate init?(userInfo: [AnyHashable: Any])
         {
+            #if swift(>=4.2)
+            guard let initialRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue,
+                let finalRect = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+                let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+                let options = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue
+            else { return nil }
+            #else
             guard let initialRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue,
                 let finalRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
                 let duration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
                 let options = (userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue
             else { return nil }
-            let animationOptions = UIViewAnimationOptions(rawValue: options).union(.beginFromCurrentState)
+            #endif
+            let animationOptions = AnimationOptions(rawValue: options).union(.beginFromCurrentState)
             self.init(initialTransitionRect: initialRect,
                       finalTransitionRect: finalRect,
                       transitionDuration: duration,
@@ -154,9 +169,16 @@ fileprivate extension NotificationCenter
 //MARK: - Notification + Keyboard Change Handler
 fileprivate extension Notification
 {
+    #if swift(>=4.2)
+    static var allKeyboardNotifications = [
+        UIResponder.keyboardWillChangeFrameNotification
+    ]
+    #else
     static var allKeyboardNotifications = [
         Notification.Name.UIKeyboardWillChangeFrame
     ]
+    #endif
+
 
     var keyboardChange: Keyboard.Change? {
         guard Notification.allKeyboardNotifications.contains(name) else { return nil }
