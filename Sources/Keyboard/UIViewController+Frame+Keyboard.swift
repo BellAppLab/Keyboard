@@ -13,7 +13,7 @@ private extension AssociationKeys {
 @nonobjc
 internal extension UIViewController
 {
-    internal func makeOriginalFrames() {
+    func makeOriginalFrames() {
         guard hasKeyboardViews else { return }
         if let keyboardViews = keyboardViews {
             var frames: [Int: CGRect] = [:]
@@ -70,13 +70,13 @@ private extension AssociationKeys {
 
 //MARK: - UIViewController + Keyboard Views
 @nonobjc
-public extension UIViewController
+internal extension UIViewController
 {
-    internal var hasKeyboardViews: Bool {
+    var hasKeyboardViews: Bool {
         return handlesKeyboard && keyboardViews?.isEmpty ?? true == false
     }
 
-    internal func setKeyboardViewsToOriginal() {
+    func setKeyboardViewsToOriginal() {
         guard hasKeyboardViews else { return }
         keyboardViews?.forEach {
             let originalFrame = originalFrames![$0.tag]!
@@ -85,7 +85,7 @@ public extension UIViewController
         view.setNeedsDisplay()
     }
 
-    internal func setKeyboardFrames(intersection: CGRect) {
+    func setKeyboardFrames(intersection: CGRect) {
         guard hasKeyboardViews, intersection != .zero else { return }
         keyboardViews?.forEach {
             let originalFrame = originalFrames![$0.tag]!
@@ -95,10 +95,14 @@ public extension UIViewController
                               height: originalFrame.height)
         }
     }
+}
 
+@objc
+public extension UIViewController
+{
     /// The collection of views that should have their frames updated when the keyboard changes.
     /// - note: This should only be used if you are not using autolayout.
-    @IBOutlet public var keyboardViews: [UIView]? {
+    @IBOutlet var keyboardViews: [UIView]? {
         get {
             if let nsArray = objc_getAssociatedObject(self, &AssociationKeys.keyboardViews) as? NSArray {
                 #if swift(>=4.0)

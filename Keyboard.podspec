@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name                = "Keyboard"
-  s.version             = "1.0.1"
+  s.version             = "1.1.0"
   s.summary             = "Never implement the UIKeyboardDidShow notification ever again. Ever."
   s.screenshot          = "https://github.com/BellAppLab/Keyboard/raw/master/Images/keyboard.png"
 
@@ -21,6 +21,8 @@ So instead of doing a whole lot of calculations, or embedding everything in `UIS
   s.social_media_url    = "https://twitter.com/BellAppLab"
 
   s.ios.deployment_target       = "9.0"
+
+  s.swift_version       = '5.0'
 
   s.module_name         = 'Keyboard'
 

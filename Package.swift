@@ -13,5 +13,5 @@ let package = Package(
             name: "Keyboard"
         ),
     ],
-    swiftLanguageVersions: [3.3, 4.1, 4.2]
+    swiftLanguageVersions: [4.2, 5.0]
 )

@@ -11,11 +11,11 @@ private extension AssociationKeys {
 }
 
 
-@nonobjc
+@objc
 public extension UIViewController
 {
     /// Toggles the `Keyboard` framework in this view controller.
-    public var handlesKeyboard: Bool {
+    @IBInspectable var handlesKeyboard: Bool {
         get {
             return (objc_getAssociatedObject(self, &AssociationKeys.handlesKeyboard) as? NSNumber)?.boolValue ?? true
         }
@@ -31,7 +31,7 @@ public extension UIViewController
     /// Sets a margin between the keyboard and the currently active text input.
     ///
     /// Defaults to 40.0.
-    @IBInspectable public var keyboardMargin: NSNumber {
+    @IBInspectable var keyboardMargin: NSNumber {
         get {
             return (objc_getAssociatedObject(self, &AssociationKeys.keyboardMargin) as? NSNumber) ?? NSNumber(floatLiteral: 40.0)
         }
@@ -43,10 +43,6 @@ public extension UIViewController
                                      objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-
-    fileprivate var margin: CGFloat {
-        return CGFloat(keyboardMargin.doubleValue) + 20.0
-    }
 }
 
 
@@ -57,6 +53,10 @@ private extension AssociationKeys {
 
 fileprivate extension UIViewController
 {
+    var margin: CGFloat {
+        return CGFloat(keyboardMargin.doubleValue) + 20.0
+    }
+
     var keyboardWasVisible: Bool {
         get {
             return (objc_getAssociatedObject(self, &AssociationKeys.keyboardWasVisible) as? NSNumber)?.boolValue ?? false
@@ -73,7 +73,7 @@ fileprivate extension UIViewController
 
 public extension KeyboardChangeHandler where Self: UIViewController
 {
-    public func handleKeyboardChange(_ change: Keyboard.Change)
+    func handleKeyboardChange(_ change: Keyboard.Change)
     {
         // Validating the View Controller's setup
         guard hasKeyboardConstraints || hasKeyboardViews else {

@@ -1,4 +1,4 @@
-# Keyboard [![Version](https://img.shields.io/badge/Version-1.0.1-black.svg?style=flat)](#installation) [![License](https://img.shields.io/cocoapods/l/Keyboard.svg?style=flat)](#license)
+# Keyboard [![Version](https://img.shields.io/badge/Version-1.1.0-black.svg?style=flat)](#installation) [![License](https://img.shields.io/cocoapods/l/Keyboard.svg?style=flat)](#license)
 
 [![Platforms](https://img.shields.io/badge/Platforms-iOS-brightgreen.svg?style=flat)](#installation)
 [![Swift support](https://img.shields.io/badge/Swift-3.3%20%7C%204.1%20%7C%204.2-red.svg?style=flat)](#swift-versions-support)
@@ -22,7 +22,7 @@ So instead of doing a whole lot of calculations, or embedding everything in `UIS
 ## Specs
 
 * iOS 9+
-* Swift 3.3+
+* Swift 4.2+
 
 ## Usage
 
@@ -131,7 +131,7 @@ UIResponder.currentFirstResponder
 ### Cocoapods
 
 ```ruby
-pod 'Keyboard', '~> 1.0'
+pod 'Keyboard', '~> 1.1'
 ```
 
 Then `import Keyboard` where needed.
@@ -139,7 +139,7 @@ Then `import Keyboard` where needed.
 ### Carthage
 
 ```swift
-github "BellAppLab/Keyboard" ~> 1.0
+github "BellAppLab/Keyboard" ~> 1.1
 ```
 
 Then `import Keyboard` where needed.
@@ -148,7 +148,7 @@ Then `import Keyboard` where needed.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/BellAppLab/Keyboard", from: "1.0")
+    .package(url: "https://github.com/BellAppLab/Keyboard", from: "1.1")
 ]
 ```
 
