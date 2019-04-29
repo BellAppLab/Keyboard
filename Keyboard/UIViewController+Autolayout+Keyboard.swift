@@ -82,7 +82,7 @@ public extension UIViewController
 
     /// The collection of `NSLayoutConstraint`s that should be updated when the keyboard changes.
     /// - note: This should only be used if you are using autolayout.
-    @IBOutlet public var keyboardConstraints: [NSLayoutConstraint]? {
+    @IBOutlet var keyboardConstraints: [NSLayoutConstraint]? {
         get {
             if let nsArray = objc_getAssociatedObject(self, &AssociationKeys.keyboardConstraints) as? NSArray {
                 #if swift(>=4.0)

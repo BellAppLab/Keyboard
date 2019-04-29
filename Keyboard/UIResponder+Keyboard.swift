@@ -6,7 +6,7 @@ import UIKit
 public extension UIResponder
 {
     /// The `UIResponder` that is currently the first responder.
-    public static var currentFirstResponder: UIResponder? {
+    static var currentFirstResponder: UIResponder? {
         return UIApplication.shared.keyWindow?.currentFirstResponder
     }
 }
@@ -18,7 +18,7 @@ public extension UIView
 {
     /// The `UIView` that is currently the first responder.
     /// Traverses the receiver's `subviews` if needed.
-    public var currentFirstResponder: UIView? {
+    var currentFirstResponder: UIView? {
         guard !isFirstResponder else { return self }
 
         for view in subviews {

@@ -12,7 +12,7 @@ public typealias AnimationOptions = UIViewAnimationOptions
 @nonobjc
 public extension Keyboard {
     /// Encapsulates the changes happening to the keyboard.
-    public struct Change: Equatable, CustomStringConvertible {
+    struct Change: Equatable, CustomStringConvertible {
         //MARK: - Public Properties
         /// The keyboard's initial frame when a change began.
         public let initialTransitionRect: CGRect
@@ -69,9 +69,9 @@ public extension Keyboard.Change
     ///     - margin:       the margin to be added to the view's frame `height`.
     ///     - superview:    the root view of which `view` is a descendant.
     /// - returns: A `CGRect` encapsulating the intersaction between the view's frame and the keyboard's final transition rect, or `CGRect.zero` if they don't intersect.
-    public func intersectionOfFinalRect(with view: UIView?,
-                                        andMargin margin: CGFloat,
-                                        in superview: UIView) -> CGRect
+    func intersectionOfFinalRect(with view: UIView?,
+                                 andMargin margin: CGFloat,
+                                 in superview: UIView) -> CGRect
     {
         guard let view = view else { return .zero }
 
@@ -102,7 +102,7 @@ public extension Keyboard.Change
 //MARK: - EQUATABLE & CUSTOM STRING CONVERTIBLE
 public extension Keyboard.Change
 {
-    public static func ==(lhs: Keyboard.Change, rhs: Keyboard.Change) -> Bool {
+    static func ==(lhs: Keyboard.Change, rhs: Keyboard.Change) -> Bool {
         guard lhs.initialTransitionRect == rhs.initialTransitionRect else { return false }
         guard lhs.finalTransitionRect == rhs.finalTransitionRect else { return false }
         guard lhs.transitionDuration == rhs.transitionDuration else { return false }
@@ -110,7 +110,7 @@ public extension Keyboard.Change
         return true
     }
 
-    public var description: String {
+    var description: String {
         return "Keyboard Change: {\n\tinitial transition rect: \(initialTransitionRect)\n\tfinal transition rect: \(finalTransitionRect)\n\ttransition duration: \(transitionDuration)\n\ttransition animation options: \(transitionAnimationOptions)"
     }
 }
@@ -129,12 +129,12 @@ public protocol KeyboardChangeHandler: AnyObject, Hashable {
 public extension KeyboardChangeHandler
 {
     /// Makes the receiver start handling keyboard notifications.
-    public func becomeKeyboardChangeHandler() {
+    func becomeKeyboardChangeHandler() {
         NotificationCenter.default.registerKeyboardNotificationHandler(self)
     }
 
     /// Makes the receiver stop handling keyboard notifications.
-    public func resignKeyboardChangeHandler() {
+    func resignKeyboardChangeHandler() {
         NotificationCenter.default.unregisterKeyboardNotificationHandler(self)
     }
 }
