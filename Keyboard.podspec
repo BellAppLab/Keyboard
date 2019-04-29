@@ -28,7 +28,7 @@ So instead of doing a whole lot of calculations, or embedding everything in `UIS
 
   s.source              = { :git => "https://github.com/BellAppLab/Keyboard.git", :tag => "#{s.version}" }
 
-  s.source_files        = "Sources/Keyboard"
+  s.source_files        = "Sources/Keyboard/*.swift"
 
   s.frameworks          = "Foundation"
   s.ios.framework       = "UIKit"
