@@ -14,7 +14,7 @@ let package = Package(
         .library(
             name: "Keyboard",
             type: .static,
-            targets: ["iOS Example"]),
+            targets: ["Keyboard"]),
     ],
     targets: [
         .target(
